@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cliente API</title>
+    <script>
+        const lat = "4.570868";
+        const long = "-74.297333"
+        const apiKey = "ff0e0145c2e0db92a46e3c20c8a35d12";
+        const endPoint = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + lat + '&lon=' + long + '&units=metric&lang=es&appid=' + apiKey
+        fetch(endPoint).then((data) => {
+            return data.json();
+        }).then((data) => {
+            //document.getElementById('json').innerHTML += JSON.stringify(data);
+            document.getElementById('timezone').value += JSON.stringify(data.timezone);
+            document.getElementById('current').value += JSON.stringify(unixToDate(data.current.dt));
+            document.getElementById('temp').innerHTML += JSON.stringify(data.current.temp)+"c°";
+            console.log(data);
+        });
+
+        function unixToDate(unixDate) {
+            let unix_timestamp = unixDate;
+            // Create a new JavaScript Date object based on the timestamp
+            // multiplied by 1000 so that the argument is in milliseconds, not seconds.
+            var date = new Date(unix_timestamp * 1000);
+            // Hours part from the timestamp
+            var hours = date.getHours();
+            // Minutes part from the timestamp
+            var minutes = "0" + date.getMinutes();
+            // Seconds part from the timestamp
+            var seconds = "0" + date.getSeconds();
+            // Will display time in 10:30:23 format
+            var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+            return formattedTime;
+        };
+    </script>
+</head>
+
+<body>
+    <div id="json">
+        <input type="text" name="" id="timezone" value="Zona Horaria: " readonly style="width: auto;">
+        <input type="text" name="" id="current" value="Solicitud hecha: " readonly style="width: auto;">
+    </div>
+    <div id="temp">
+        temperatura
+    </div>
+</body>
+
+</html>
